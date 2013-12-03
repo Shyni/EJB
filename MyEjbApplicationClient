@@ -1,0 +1,47 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ejb;
+
+import java.util.Properties;
+import javax.naming.InitialContext; 
+import javax.rmi.*;
+
+
+public class MyEjbApplicationClient {     
+    public static void main(String [] args){
+        String capital=new String();
+        try{
+             Properties p = new Properties();
+
+            //The JNDI properties you set depend
+            //on which server you are using.
+            //These properties are for the Remote Server.
+            p.put("java.naming.factory.initial", "org.openejb.client.RemoteInitialContextFactory");
+            p.put("java.naming.provider.url", "127.0.0.1:4201");
+            p.put("java.naming.security.principal", "myuser");
+            p.put("java.naming.security.credentials", "mypass");    
+
+            //Now use those properties to create
+            //a JNDI InitialContext with the server.
+            InitialContext ctx = new InitialContext( p );
+
+            //Lookup the bean using it's deployment id
+            Object obj = ctx.lookup("/CountryCapitalBeanRemote");
+
+            //Be good and use RMI remote object narrowing
+            //as required by the EJB specification.
+            CountryCapital ejbHome = (CountryCapital)
+            PortableRemoteObject.narrow(obj,CountryCapital.class);
+
+            String message = ejbHome.capitalName("India's capital is New Delhi");
+
+            System.out.println( message );
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }     
+    }  
+}
