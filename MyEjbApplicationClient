@@ -5,27 +5,19 @@
 package ejb;
 
 import java.util.Properties;
+import javax.naming.Context;
 import javax.naming.InitialContext; 
 import javax.rmi.*;
 
 
-public class MyEjbApplicationClient {     
+public class MyEjbApplicationClient {  
+     private static InitialContext ctx;
     public static void main(String [] args){
-        String capital=new String();
         try{
-             Properties p = new Properties();
+            Properties properties = new Properties();
+            properties.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.apache.openejb.core.LocalInitialContextFactory");
 
-            //The JNDI properties you set depend
-            //on which server you are using.
-            //These properties are for the Remote Server.
-            p.put("java.naming.factory.initial", "org.openejb.client.RemoteInitialContextFactory");
-            p.put("java.naming.provider.url", "127.0.0.1:4201");
-            p.put("java.naming.security.principal", "myuser");
-            p.put("java.naming.security.credentials", "mypass");    
-
-            //Now use those properties to create
-            //a JNDI InitialContext with the server.
-            InitialContext ctx = new InitialContext( p );
+            ctx = new InitialContext(properties);
 
             //Lookup the bean using it's deployment id
             Object obj = ctx.lookup("/Capital");
