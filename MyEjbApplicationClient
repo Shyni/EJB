@@ -28,7 +28,7 @@ public class MyEjbApplicationClient {
             InitialContext ctx = new InitialContext( p );
 
             //Lookup the bean using it's deployment id
-            Object obj = ctx.lookup("/CountryCapitalBeanRemote");
+            Object obj = ctx.lookup("/Capital");
 
             //Be good and use RMI remote object narrowing
             //as required by the EJB specification.
